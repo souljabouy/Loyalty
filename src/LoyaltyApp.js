@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, Alert, StyleSheet} from 'react-native';
+import {View, Text, TextInput, Alert, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import {Card, CardSection, Button, Header } from './components/common';
 
 class LoyaltyApp extends Component {
@@ -8,12 +8,15 @@ class LoyaltyApp extends Component {
 
     this.state = {
       phnNo:'',
-      passWord: ''
+      passWord: '',
+      loading: false,
+      error:''
     }
 
   }
 
   onButtonPress(){
+        this.setState({ loading:true, error:'' });
 
     fetch('http://echespos.com/jawaahiruapi/index.php', {
       method: 'POST',
@@ -30,18 +33,40 @@ class LoyaltyApp extends Component {
       .then((responseJson) => {
 
         if (responseJson.results.cmd === '102011') {
-          Alert.alert('', 'Login Successful')
+          this.onLoginSucces()
         }
         else {
-          Alert.alert('', responseJson.results.msg)
+           this.onLoginFail()
         }
 
       })
   }
+  onLoginSucces(){
+      this.setState({
+          phnNo:'',
+          passWord:'',
+          loading:'',
+          error:''
+      })
+      return Alert.alert('', 'Login Successful')
+  }
+
+  onLoginFail() {
+    this.setState({ error: 'Authentication Failed', loading: false });
+  }
+
+  renderButton() {
+      if (this.state.loading) {
+          return <ActivityIndicator size={'small'} />
+      }
+     return (
+        <Button withPress={this.onButtonPress.bind(this)} >Log In</Button>
+     ) 
+  }
 
   render() {
     return(
-      <View>
+      <ScrollView>
         <Header headerText='Login' />
         <Card>
           <CardSection >
@@ -49,21 +74,30 @@ class LoyaltyApp extends Component {
               style={ styles.TextInputStyle }
               value={this.state.phnNo}
               onChangeText={phnNo=> this.setState({phnNo})}
+              keyboardType="number-pad"
             />
           </CardSection>
           <CardSection>
             <TextInput
+              secureTextEntry
               style={ styles.TextInputStyle }
               value={this.state.passWord}
               onChangeText={passWord=>this.setState({passWord})}
             />
           </CardSection>
+          <Text>
+          {this.state.error}
+        </Text>
         </Card>
         <View style={{marginTop:10}}>
-          <CardSection children= {<Button withPress={this.onButtonPress.bind(this)} >Log In</Button>} />
+          <CardSection >
+            {this.renderButton()}
+          </CardSection>
+
           <CardSection children= {<Button>Register</Button>} />
        </View>
-      </View>
+       
+      </ScrollView>
     )
   }
 }

@@ -33,7 +33,7 @@ componentDidMount(){
             },
             body: JSON.stringify({
                 cmd: '103000',
-                user_id: this.state.UserId,
+                user_id: JSON.stringify(this.state.UserId),
                 token: this.state.accessToken
             }),
         }).then((response) => response.json())
@@ -47,7 +47,7 @@ componentDidMount(){
             
         }
         )
-        .catch((error)=> Alert.alert(error,'authantication fail,network error') )
+        .catch((error)=> Alert.alert(error,'network error') )
     }
 
 async getTokken(){
@@ -76,7 +76,7 @@ async storeToken(respone1){
     try{
       await AsyncStorage.setItem('Tokken', respone1)
     } catch(error){
-      console.log(error)
+      Alert.alert('','tokken store fail sfter success')
     }
   }
 
@@ -84,7 +84,7 @@ async storeUserId(respone1){
     try{
       await AsyncStorage.setItem('UserId', respone1)
     } catch(error){
-      console.log(error)
+        Alert.alert('','user store fail after success')
     }
   }
 
@@ -95,7 +95,7 @@ async storeUserId(respone1){
 }
 
 onAuthFail(){
-    Alert.alert('', 'network error');
+   this.props.navigation.navigate('Auth')
 }
       
     render(){
@@ -106,6 +106,11 @@ onAuthFail(){
                         {this.state.UserId}
                     </Text>
                 </Card>
+                <Card>
+                <Text>
+                    {this.state.accessToken}
+                </Text>
+            </Card>
                 <Spinner size='large' />
                 <Button withPress={()=> this.props.navigation.navigate('Auth') }/>
             </View>

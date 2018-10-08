@@ -3,7 +3,10 @@ import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, Toucha
 import {Card, CardSection, Button, Header } from '../components/common';
 
 class LogIn extends Component {
-
+  componentWillMount(){
+    this.getTokken();
+    this.getUserId();
+    }
 
   constructor(props) {
     super(props);
@@ -68,6 +71,28 @@ class LogIn extends Component {
      Alert.alert('','error at storing user id')
     }
   }
+
+  getUserId = async () => {
+    try{
+        let a = await AsyncStorage.getItem('USERID');
+        if (a !== null){
+            this.setState({userID:a})
+        }
+    } catch (error){
+        Alert.alert('','get user error')
+    }
+} 
+
+  getTokken = async () => {
+    try{
+        let a = await AsyncStorage.getItem('Tokken');
+        if (a !== null){
+            this.setState({token:a})
+        }
+    } catch (error){
+        console.log(error)
+    }
+}
 
   onLoginSucces( arg1, arg2){
       this.setState({

@@ -23,10 +23,10 @@ componentWillMount(){
     this.getTokken();
     console.log('component will mount')
     this.getUserId();
-    this.Authacntication();
 }
 
 componentWillUpdate(){
+    this.authantication(this.state.UserId, this.state.accessToken);
     console.log('component Did mount')
 }
 
@@ -53,7 +53,7 @@ async getUserId(){
     }
 }
 
-Authacntication(){
+authantication(argument1, argument2){
     fetch('http://echespos.com/jawaahiruapi/index.php', {
         method: 'POST',
         headers: {
@@ -62,8 +62,8 @@ Authacntication(){
         },
         body: JSON.stringify({
             cmd: '103000',
-            user_id: this.state.UserId,
-            token: this.state.accessToken
+            user_id: argument1,
+            token: argument2
         }),
     }).then((response) => response.json())
     .then((responseJson) => {

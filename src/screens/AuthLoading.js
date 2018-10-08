@@ -23,31 +23,34 @@ componentWillMount(){
     this.getTokken();
     this.getUserId();
 }
-
-componentDidMount(){
-        fetch('http://echespos.com/jawaahiruapi/index.php', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                cmd: '103000',
-                user_id: JSON.stringify(this.state.UserId),
-                token: this.state.accessToken
-            }),
-        }).then((response) => response.json())
-        .then((responseJson) => {
-            if (responseJson.results.cmd === '103011') {   
-                this.onAuthSucces(responseJson.data.user_id, responseJson.data.token)
-            }
-            else {
-                this.onAuthFail()
-            }
-            
+authantication(){
+    fetch('http://echespos.com/jawaahiruapi/index.php', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            cmd: '103000',
+            user_id: JSON.stringify(this.state.UserId),
+            token: this.state.accessToken
+        }),
+    }).then((response) => response.json())
+    .then((responseJson) =>{
+        if (responseJson.results.cmd === '103011') { 
+            Alert.alert('', responseJson.results.cmd)  
+            this.onAuthSucces(responseJson.data.user_id, responseJson.data.token)
         }
-        )
-        .catch((error)=> Alert.alert(error,'network error') )
+        else {
+            Alert.alert('', responseJson.results.cmd)  
+            this.onAuthFail()
+        }
+        
+    })
+    .catch((error)=> Alert.alert(error,'network error') )
+}
+componentDidMount(){
+     this.authantication();   
     }
 
 async getTokken(){

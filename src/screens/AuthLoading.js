@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, AsyncStorage} from 'react-native';
+import {View, Text, AsyncStorage, Alert} from 'react-native';
 import {Spinner} from '../components/common';
 import { Header, Card, Button } from '../components/common';
 
@@ -21,15 +21,34 @@ class AuthLoading extends Component {
 
 componentWillMount(){
     this.getTokken();
-    console.log('component will mount')
     this.getUserId();
 }
 
-componentWillUpdate(){
-    this.authantication(this.state.UserId, this.state.accessToken);
-    console.log('component Did mount')
-}
-
+componentDidMount(){
+        fetch('http://echespos.com/jawaahiruapi/index.php', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cmd: '103000',
+                user_id: this.state.UserId,
+                token: this.state.accessToken
+            }),
+        }).then((response) => response.json())
+        .then((responseJson) => {
+            if (responseJson.results.cmd === '103011') {   
+                this.onAuthSucces(responseJson.data.user_id, responseJson.data.token)
+            }
+            else {
+                this.onAuthFail()
+            }
+            
+        }
+        )
+        .catch((error)=> Alert.alert(error,'authantication fail,network error') )
+    }
 
 async getTokken(){
     try{
@@ -37,46 +56,20 @@ async getTokken(){
         if (a !== null ){
             this.setState({accessToken:a})
         }
-    } catch (error){
-        console.log('no Tokken')
+    }catch (error){
+        Alert.alert('','no Tokken')
     }
 }
 
 async getUserId(){
     try{
-        let a = await AsyncStorage.getItem('UserId');
+        let a = await AsyncStorage.getItem('USERID');
         if (a !== null){
             this.setState({ UserId:a })
         }
     } catch (error){
-        console.log(error)
+        Alert.alert('','no userid')
     }
-}
-
-authantication(argument1, argument2){
-    fetch('http://echespos.com/jawaahiruapi/index.php', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            cmd: '103000',
-            user_id: argument1,
-            token: argument2
-        }),
-    }).then((response) => response.json())
-    .then((responseJson) => {
-        if (responseJson.results.cmd === '103011') {   
-            this.onAuthSucces(responseJson.data.user_id, responseJson.data.token)
-            console.log('done')
-        }
-        else {
-            this.onLoginFail()
-        }
-        
-    }
-    )
 }
 
 async storeToken(respone1){
@@ -95,14 +88,14 @@ async storeUserId(respone1){
     }
   }
 
-onAuthSucces(arg1, arg2){
+  onAuthSucces(arg1, arg2){
     this.storeUserId(arg1);
     this.storeToken(arg2);
     this.props.navigation.navigate('App');
 }
 
-onLoginFail(){
-    this.props.navigation.navigate('AuthStack')
+onAuthFail(){
+    Alert.alert('', 'network error');
 }
       
     render(){
@@ -110,9 +103,11 @@ onLoginFail(){
             <View style={{flex:1}} >
                 <Card>
                     <Text>
-                        {this.state.accessToken}
+                        {this.state.UserId}
                     </Text>
                 </Card>
+                <Spinner size='large' />
+                <Button withPress={()=> this.props.navigation.navigate('Auth') }/>
             </View>
         )
     }

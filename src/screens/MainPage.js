@@ -7,12 +7,14 @@ class MainPage extends Component {
         super(props);
     
         this.state = {
-          accessToken: "hello"
+          accessToken: "hello",
+          UserId:''
         }
       }
 
 componentWillMount(){
     this.getTokken();
+    this.getUserId();
 }
 
 getTokken = async () => {
@@ -25,6 +27,17 @@ getTokken = async () => {
         console.log(error)
     }
 }   
+getUserId = async () => {
+    try{
+        let a = await AsyncStorage.getItem('USERID');
+        if (a !== null){
+            this.setState({UserId:a})
+        }
+    } catch (error){
+        Alert.alert('','get user error')
+    }
+} 
+
 render(){
         return(
             <View>
@@ -32,6 +45,11 @@ render(){
                 <Card Style={styles.containerStyle} >
                     <Text>
                         {this.state.accessToken}
+                    </Text>
+                </Card>
+                <Card Style={styles.containerStyle} >
+                    <Text>
+                        {this.state.UserId}
                     </Text>
                 </Card>
             </View>

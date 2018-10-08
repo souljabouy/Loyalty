@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, AsyncStorage } from 'react-native';
+import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
 import {Card, CardSection, Button, Header } from '../components/common';
 
 class LogIn extends Component {
@@ -13,7 +13,7 @@ class LogIn extends Component {
         passWord: '',
         loading: false,
         error:'',
-        userId:'',
+        userID:'',
         token:''
       }
 
@@ -21,6 +21,11 @@ class LogIn extends Component {
   static navigationOptions = {
     header:null
   }
+
+//  componentWillUpdate() {
+//    this.storeToken(this.state.token);
+//    this.storeUserId(this.state.userID);
+//  }
 
   onButtonPress(){
     this.setState({ loading:true, error:'' });
@@ -52,15 +57,15 @@ class LogIn extends Component {
     try{
       await AsyncStorage.setItem('Tokken', respone1)
     } catch(error){
-      console.log(error)
+      Alert.alert('','error  storing user tokken')
     }
   }
 
-  async storeUserId(respone1){
+  async storeUserId(respone3){
     try{
-      await AsyncStorage.setItem('UserId', respone1)
+      await AsyncStorage.setItem('USERID', JSON.stringify(respone3))
     } catch(error){
-      console.log(error)
+     Alert.alert('','error at storing user id')
     }
   }
 
@@ -70,11 +75,11 @@ class LogIn extends Component {
           passWord:'',
           loading:'',
           error:'Login Sucess',
-          userId:arg1,
-         token:arg2
+          userID:arg1,
+          token:arg2
         });
-        this.storeToken(arg1);
-        this.storeUserId(arg2);
+        this.storeToken(arg2)
+        this.storeUserId(arg1)
         this.props.navigation.navigate('App');   
   }
 
@@ -117,9 +122,12 @@ class LogIn extends Component {
               onChangeText={passWord=>this.setState({passWord})}
             />
             </CardSection>
-            <Text>
-              {this.state.token}
-            </Text>
+              <Text>
+                {this.state.token}
+              </Text>
+              <Text>
+                {this.state.userID}
+              </Text>
             </Card>
             <View style={{marginTop:10}}>
             <CardSection >

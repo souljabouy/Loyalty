@@ -3,12 +3,13 @@ import {View, TextInput, Alert, StyleSheet, ScrollView, ActivityIndicator, Text 
 import {Card, CardSection, Button, Header } from '../components/common';
 
 class Register extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
             phnNo:'',
             error:'',
-            loading: false,
+            loading: false
 
         }
     }
@@ -56,7 +57,7 @@ class Register extends Component {
             loading:false,
             error:''
         })
-        return Alert.alert('', 'User Created')
+        return (this.props.navigation.goBack())
     }
     case100012(){
         return (this.setState({
@@ -78,11 +79,12 @@ class Register extends Component {
         }))
     }
     case100016(){
-        return (this.setState({
+        this.setState({
             phnNo:'',
             loading:false,
             error:'phone number is in use'
-        }))
+            })
+    return (this.props.navigation.goBack())
     }
 
     onLoginFail(){
@@ -97,33 +99,36 @@ class Register extends Component {
             return <ActivityIndicator size='small' />
         }
         return (
-            <Button withPress={ this.registerOnButtonPress.bind(this) } >Create User</Button>
+            <Button withPress={ this.registerOnButtonPress.bind(this) } >Register</Button>
         )
     }
 
     render(){
         return(
-            <ScrollView>
-        <Header headerText='Register' />
-        <Card>
-          <CardSection >
-            <TextInput
-               placeholder="phone number"
-              style={ styles.TextInputStyle }
-              value={this.state.phnNo}
-              onChangeText={phnNo => this.setState({phnNo})}
-              keyboardType="number-pad"
-            />
-          </CardSection>
-        </Card>
-        <View style={{paddingTop:10}}>
-            <Text> {this.state.error} </Text>
-          <CardSection >
-            { this.renderButton() }
-          </CardSection>
-       </View>
-       
-      </ScrollView>
+                <View style={ styles.MainScrollViewStyle } >
+                    <Card Styles={styles.containerStyle}>
+                    <CardSection >
+                    <TextInput
+                    placeholder="phone number"
+                    style={ styles.TextInputStyle }
+                    value={this.state.phnNo}
+                    onChangeText={phnNo => this.setState({phnNo})}
+                    keyboardType="number-pad"
+                    />
+                    </CardSection>
+                    </Card>
+                    <View style={{paddingTop:10}}>
+                    <Text> {this.state.error} </Text>
+                    <CardSection >
+                        { this.renderButton() }
+                    </CardSection>
+                    <CardSection>
+                        <Button withPress={()=>this.props.navigation.navigate('App')} >
+                            to the app
+                        </Button>
+                    </CardSection>
+                    </View>                
+                </View>
         )
     }
 }
@@ -132,6 +137,27 @@ const styles = StyleSheet.create({
     TextInputStyle: {
       height:50,
       width: '100%'
+    },
+    containerStyle: {
+            borderWidth: 1,
+            borderRadius: 2,
+            borderColor: '#ddd',
+            borderBottomWidth: 0,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 2,
+            elevation: 1,
+            marginLeft: 5,
+            marginRight: 5,
+            marginTop: 10
+    
+        },
+    MainScrollViewStyle: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        
     }
   })
 

@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Text, View } from 'react-native';
-import LoyaltyApp from './src/LoyaltyApp'
+import LoyaltyApp from './src/LoyaltyApp';
 
 
 

@@ -1,33 +1,58 @@
-import { createStackNavigator, createSwitchNavigator, createDrawerNavigator } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, createDrawerNavigator, createTabNavigator,StackNavigator, DrawerNavigator } from 'react-navigation';
 import React from 'react';
 import LogIn from './screens/LogIn';
 import Register from './screens/Register';
 import MainPage from './screens/MainPage';
-import Page2 from './screens/Page2';
+import GlobalPoints from './screens/GlobalPoints';
 import AuthLoading from './screens/AuthLoading';
+import StorePage from './screens/StorePage'
 
-const AppLoading = createStackNavigator({
-    AuthLoading: {
-        screen:AuthLoading
-    }
-})
 
 const AuthStack = createStackNavigator({
-    Login: {
-        screen: LogIn
-        },
-    Register:{
-        screen: Register
+    AuthLoading:AuthLoading,
+    Login:LogIn ,
+    Register:Register,
+    },
+        {
+            initialRouteName: 'AuthLoading'
         }
-    })
-const AppStack = createDrawerNavigator({ MainPage:MainPage, Page2:Page2 })
+    )
+ 
+
+const MainPageStack = StackNavigator({
+    Main:{
+        screen: MainPage
+    },
+    StorePage:{
+        screen:StorePage
+    }
+},
+    {
+        navigationOptions:{
+            initialRouteName: 'Main',
+        }
+    }
+)
+       
+const DrawerStack = DrawerNavigator({ 
+        MainPageStack:{
+            screen:MainPageStack,
+            navigationOptions:{
+                title:'Home'
+            }
+        },
+        GlobalPoints:{
+            screen:GlobalPoints
+        } 
+    }
+)
 
 export default App = createSwitchNavigator({
-    AppLoading:AppLoading,
     Auth:AuthStack,
-    App:AppStack
+    App:DrawerStack
     },
     {
-        initialRouteName: 'AppLoading'
+        initialRouteName: 'Auth',
+        gesturesEnabled:false
     }
 )

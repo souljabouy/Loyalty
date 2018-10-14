@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, AsyncStorage, Alert } from 'react-native';
-import { Header, Card, Button } from '../components/common'
+import { View, Text, AsyncStorage, Alert, StyleSheet, ListView } from 'react-native';
+import { Header, Card, Button, CardSection } from '../components/common'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 class MainPage extends Component {
     constructor(props){
@@ -9,12 +10,46 @@ class MainPage extends Component {
         this.state = {
           accessToken: "hello",
           UserId:''
+
         }
       }
-
+static navigationOptions = ({ navigation }) => {   
+    return {
+        headerLeft: (
+            <View style={{ padding: 10 }}>    
+            <Button withPress={() => navigation.openDrawer()} >
+            ==
+                </Button>
+            </View>
+            ),
+            title:'main'
+        }
+    }
 componentWillMount(){
     this.getTokken();
+    //this.getUserId();
     this.getUserId();
+}
+componentWillUnmount(){
+
+}
+componentDidUpdate(){
+    this.getStores();
+}
+
+getStores(){
+    fetch('http://echespos.com/jawaahiruapi/index.php',{
+        method: 'POST',
+        headers:{
+            Accept: 'application/json',
+                    'content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+            cmd:'',
+            user_id:'',
+            tokken:''
+        })    
+    })
 }
 
 getTokken = async () => {
@@ -37,28 +72,51 @@ getUserId = async () => {
         Alert.alert('','get user error')
     }
 } 
-
 render(){
         return(
-            <View>
-                <Header headerText='Stores' />
-                <Card Style={styles.containerStyle} >
-                    <Text>
-                        {this.state.accessToken}
-                    </Text>
-                </Card>
-                <Card Style={styles.containerStyle} >
-                    <Text>
-                        {this.state.UserId}
-                    </Text>
-                </Card>
+            <View style={styles.ViewStyle}>
+                    <Card Style={styles.containerStyle} >
+                        <CardSection>
+                            <Button withPress={()=> this.props.navigation.navigate('StorePage') } >
+                                Stor1
+                            </Button>
+                        </CardSection>
+                        <CardSection>
+                            <Button>
+                                Stor2
+                            </Button>
+                        </CardSection>
+                        <CardSection>
+                            <Button>
+                                stor3
+                            </Button>
+                        </CardSection>
+                        <CardSection>
+                            <Button>
+                                stor4
+                            </Button>
+                        </CardSection>
+                        <CardSection>
+                            <Button>
+                                store5
+                            </Button>
+                        </CardSection>
+                        <CardSection>
+                            <Button>
+                                stor6
+                        </Button>
+                        </CardSection>
+                    </Card>
             </View>
-        )
+            )
+        }
     }
-}
 
-
-const styles = {
+            
+const styles = StyleSheet.create({
+    ViewStyle: {
+        flex:1
+    },
     containerStyle: {
         borderWidth: 1,
         borderRadius: 2,
@@ -73,8 +131,9 @@ const styles = {
         marginRight: 5,
         marginTop: 10,
         height:100,
-        justifyContent:'center'
+        justifyContent:'center',
+        flex:1
 
     }}
-
+)
 export default MainPage;

@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { Header, Card } from '../components/common'
 
-class Page2 extends Component {
+class GlobalPoints extends Component {
+    static navigationOptions = {
+        title:'GlobalPoints'
+    }
+    
     render(){
         return(
             <View>
-                <Header headerText='Stores' />
                 <Card Style={styles.containerStyle} >
                     <Text>This is Page 2</Text>
                 </Card>
@@ -35,4 +38,4 @@ const styles = {
 
     }}
 
-export default Page2;
+export default GlobalPoints;

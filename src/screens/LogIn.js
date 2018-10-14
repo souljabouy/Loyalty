@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
 import {Card, CardSection, Button, Header } from '../components/common';
+import { getTokken } from '../components/asyncFunctions/AsyncFunctions'
 
 class LogIn extends Component {
   componentWillMount(){
-    this.getTokken();
+    getTokken();
     this.getUserId();
     }
 
@@ -12,8 +13,8 @@ class LogIn extends Component {
     super(props);
 
       this.state = {
-        phnNo:'',
-        passWord: '',
+        PhnNo:'',
+        Password: '',
         loading: false,
         error:'',
         userID:'',
@@ -25,9 +26,9 @@ class LogIn extends Component {
     header:null
   }
 
-//  componentWillUpdate() {
-//    this.storeToken(this.state.token);
-//    this.storeUserId(this.state.userID);
+//  componentDidUpdate() {
+//    this.storePassword(this.state.passWord);
+//    this.storePhoneNumber(this.state.PhnNo);
 //  }
 
   onButtonPress(){
@@ -40,8 +41,8 @@ class LogIn extends Component {
       },
       body: JSON.stringify({
         cmd: '102000',
-        phone: this.state.phnNo,
-        password: this.state.passWord
+        phone: this.state.PhnNo,
+        password: this.state.Password
       }),
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -56,9 +57,25 @@ class LogIn extends Component {
    )
   }
 
+  async storePhoneNumber(respone1){
+    try{
+      await AsyncStorage.setItem('PHONE', respone1)
+    } catch(error){
+      Alert.alert('','error  storing user phone number')
+    }
+  }
+
+  async storePassword(respone1){
+    try{
+      await AsyncStorage.setItem('PASSWORD', respone1)
+    } catch(error){
+      Alert.alert('','error  storing user phone password')
+    }
+  }
+
   async storeToken(respone1){
     try{
-      await AsyncStorage.setItem('Tokken', respone1)
+      await AsyncStorage.setItem('TOKKEN', respone1)
     } catch(error){
       Alert.alert('','error  storing user tokken')
     }
@@ -83,26 +100,28 @@ class LogIn extends Component {
     }
 } 
 
-  getTokken = async () => {
-    try{
-        let a = await AsyncStorage.getItem('Tokken');
-        if (a !== null){
-            this.setState({token:a})
-        }
-    } catch (error){
-        console.log(error)
-    }
-}
+//   getTokken = async () => {
+//     try{
+//         let a = await AsyncStorage.getItem('TOKKEN');
+//         if (a !== null){
+//             this.setState({token:a})
+//         }
+//     } catch (error){
+//         console.log(error)
+//     }
+// }
 
   onLoginSucces( arg1, arg2){
       this.setState({
-          phnNo:'',
-          passWord:'',
+          // PhnNo:'',
+          // passWord:'',
           loading:'',
           error:'Login Sucess',
           userID:arg1,
           token:arg2
         });
+        this.storePassword(this.state.Password),
+        this.storePhoneNumber(this.state.PhnNo),
         this.storeToken(arg2)
         this.storeUserId(arg1)
         this.props.navigation.navigate('App');   
@@ -133,8 +152,8 @@ class LogIn extends Component {
         <TextInput
         placeholder="phone number"
               style={ styles.TextInputStyle }
-              value={this.state.phnNo}
-              onChangeText={phnNo=> this.setState({phnNo})}
+              value={this.state.PhnNo}
+              onChangeText={PhnNo=> this.setState({PhnNo})}
               keyboardType="number-pad"
               />
           </CardSection>
@@ -143,15 +162,15 @@ class LogIn extends Component {
           placeholder="password"
               secureTextEntry
               style={ styles.TextInputStyle }
-              value={this.state.passWord}
-              onChangeText={passWord=>this.setState({passWord})}
+              value={this.state.Password}
+              onChangeText={Password=>this.setState({Password})}
             />
             </CardSection>
               <Text>
                 {this.state.token}
               </Text>
               <Text>
-                {this.state.userID}
+                {this.state.PhnNo}
               </Text>
             </Card>
             <View style={{marginTop:10}}>

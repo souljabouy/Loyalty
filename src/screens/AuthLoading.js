@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {View, Text, AsyncStorage, Alert} from 'react-native';
+import {View, Text, AsyncStorage, Alert, Button} from 'react-native';
 import {Spinner} from '../components/common';
-import { Header, Card, Button } from '../components/common';
-
+import { Header, Card } from '../components/common';
 
 class AuthLoading extends Component {
 
@@ -14,16 +13,17 @@ class AuthLoading extends Component {
         super(props);
     
         this.state = {
-          accessToken: "fg",
-          UserId:''
+            Password: '',
+            PhnNo:''
         }
       }
-
 componentWillMount(){
-    this.getTokken();
-    this.getUserId();
+    //this.AuthLoading()
+    this.getPassword(),
+    this.getPhoneNumber()    
 }
-authantication(){
+
+AuthLoading(){  
     fetch('http://echespos.com/jawaahiruapi/index.php', {
         method: 'POST',
         headers: {
@@ -31,94 +31,83 @@ authantication(){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            cmd: '103000',
-            user_id: JSON.stringify(this.state.UserId),
-            token: this.state.accessToken
+            cmd: '102000',
+            phone: this.state.PhnNo,
+            password: this.state.Password
         }),
-    }).then((response) => response.json())
-    .then((responseJson) =>{
-        if (responseJson.results.cmd === '103011') { 
-            Alert.alert('', responseJson.results.cmd)  
-            this.onAuthSucces(responseJson.data.user_id, responseJson.data.token)
-        }
-        else {
-            Alert.alert('', responseJson.results.cmd)  
-            this.onAuthFail()
-        }
-        
-    })
-    .catch((error)=> Alert.alert(error,'network error') )
+    }).then((response) => response.json()       
+    )
+        .then((responseJson) =>{
+           Alert.alert('',responseJson.results.cmd)
+           if (responseJson.results.cmd === '102011') {  
+               this.onAuthSucces(responseJson.data.user_id, responseJson.data.token)
+           }
+           else {
+               this.onAuthFail()
+            } 
+       })
+       .catch((error)=> Alert.alert(error,'network error') )
 }
-componentDidMount(){
-     this.authantication();   
-    }
 
-async getTokken(){
+async getPassword(){
     try{
-        let a = await AsyncStorage.getItem('Tokken');
+        let a = await AsyncStorage.getItem('PASSWORD');
         if (a !== null ){
-            this.setState({accessToken:a})
+            //return (a)
+            this.setState({Password:a})
         }
     }catch (error){
-        Alert.alert('','no Tokken')
+        Alert.alert('','cant get password')
     }
 }
 
-async getUserId(){
+async getPhoneNumber(){
     try{
-        let a = await AsyncStorage.getItem('USERID');
+        let a = await AsyncStorage.getItem('PHONE');
         if (a !== null){
-            this.setState({ UserId:a })
+            //return a
+            this.setState({ PhnNo:a })
         }
     } catch (error){
-        Alert.alert('','no userid')
+        Alert.alert('','cant get phn no')
     }
 }
 
 async storeToken(respone1){
     try{
-      await AsyncStorage.setItem('Tokken', respone1)
+      await AsyncStorage.setItem('TOKKEN', respone1)
     } catch(error){
       Alert.alert('','tokken store fail sfter success')
     }
   }
-
-async storeUserId(respone1){
-    try{
-      await AsyncStorage.setItem('UserId', respone1)
-    } catch(error){
-        Alert.alert('','user store fail after success')
+  
+  async storeUserId(respone1){
+      try{
+          await AsyncStorage.setItem('USERID', JSON.stringify(respone1))
+        } catch(error){
+            Alert.alert(error,'user store fail after success')
+        }
     }
-  }
-
-  onAuthSucces(arg1, arg2){
-    this.storeUserId(arg1);
-    this.storeToken(arg2);
-    this.props.navigation.navigate('App');
-}
-
-onAuthFail(){
-   this.props.navigation.navigate('Auth')
-}
-      
+    
+    onAuthSucces(arg1, arg2){
+        this.storeUserId(arg1);
+        this.storeToken(arg2);
+        this.props.navigation.navigate('App');
+    }
+    
+    onAuthFail(){
+        //Alert.alert('', 'password: ' + this.state.Password)
+        this.props.navigation.navigate('Login')
+    }
+    
     render(){
-        return(
+        this.AuthLoading()
+        return (
             <View style={{flex:1}} >
-                <Card>
-                    <Text>
-                        {this.state.UserId}
-                    </Text>
-                </Card>
-                <Card>
-                <Text>
-                    {this.state.accessToken}
-                </Text>
-            </Card>
-                <Spinner size='large' />
-                <Button withPress={()=> this.props.navigation.navigate('Auth') }/>
+            <Button onPress= {()=>this.props.navigation.navigate('Login')} title ='press me' />
             </View>
-        )
-    }
+            )
+        }
 }
 
 

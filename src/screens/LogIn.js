@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import {View,KeyboardAvoidingView ,Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, AsyncStorage, Alert, Image } from 'react-native';
+import {View, ScrollView, KeyboardAvoidingView,Dimensions ,Text, TextInput, StyleSheet, Animated, Keyboard, Platform, ActivityIndicator, TouchableOpacity, AsyncStorage, Alert, Image } from 'react-native';
+const window = Dimensions.get('window');
+
+
+const IMAGE_HEIGHT = window.width/1.2;
+const IMAGE_HEIGHT_SMALL = window.width / 2.5;
 
 class LogIn extends Component {
   componentWillMount(){
@@ -17,6 +22,7 @@ class LogIn extends Component {
         userID:'',
         token:''
       }
+      this.imageHeight = new Animated.Value(IMAGE_HEIGHT); 
 
   }
   static navigationOptions = {
@@ -127,24 +133,75 @@ class LogIn extends Component {
      ) 
   }
 
+  componentWillMount () {
+   if (Platform.OS=='ios'){
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+   }else{
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+   }
+
+  }
+
+  componentWillUnmount() {
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
+  }
+
+  keyboardWillShow = (event) => {
+    Animated.timing(this.imageHeight, {
+      duration: event.duration,
+      toValue: IMAGE_HEIGHT_SMALL,
+    }).start();
+  };
+
+  keyboardWillHide = (event) => {
+    Animated.timing(this.imageHeight, {
+      duration: event.duration,
+      toValue: IMAGE_HEIGHT,
+    }).start();
+  };
+
+
+  keyboardDidShow = (event) => {
+    Animated.timing(this.imageHeight, {
+      toValue: IMAGE_HEIGHT_SMALL,
+    }).start();
+  };
+
+  keyboardDidHide = (event) => {
+    Animated.timing(this.imageHeight, {
+      toValue: IMAGE_HEIGHT,
+    }).start();
+  };
+
   render() {
     return(
-      <ScrollView style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
-        <View style={styles.containerSection} >
-            <Image source={require('../Assets/MerakiLogo.jpg')} style={{alignSelf:'center'}} />
-          </View>
-        <View style={styles.containerSection} >
-          <TextInput
-              placeholder="phone number"
-              style={ styles.TextInputStyle }
-              value={this.state.PhnNo}
-              onChangeText={PhnNo=> this.setState({PhnNo})}
-              keyboardType="number-pad"
-              placeholderTextColor='#dbdbdb'
-              textAlign='center'
+      <View style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
 
-           />
-          <TextInput 
+        <View style={{Flex:1, justifyContent:'center', backgroundColor:'#000'}} >
+          <Animated.Image source={require('../Assets/MerakiLogo.jpg')} style={[styles.logo, {height:this.imageHeight}]} />
+        </View>
+
+        <ScrollView style={{flex:1, backgroundColor:'#000', marginTop:-15}}>
+        <KeyboardAvoidingView style={{ flex:1, justifyContent:'center', alignContent:'center', paddingLeft:35, paddingRight:35 }} behavior='padding' >
+
+          <View style={{  borderRadius:50, height:45, backgroundColor:'#383838' }} >
+            <TextInput
+                placeholder="phone number"
+                style={ styles.TextInputStyle }
+                value={this.state.PhnNo}
+                onChangeText={PhnNo=> this.setState({PhnNo})}
+                keyboardType="number-pad"
+                placeholderTextColor='#dbdbdb'
+                textAlign='center'
+
+                />
+          </View>
+
+          <View style={{ borderRadius:50, height:45, marginTop:8, backgroundColor:'#383838'}} >
+            <TextInput 
               placeholder='Password'
               secureTextEntry
               style={styles.TextInputStyle}
@@ -154,52 +211,46 @@ class LogIn extends Component {
               textAlign='center'
             />
           </View>
+
           <Text style={{color:'#fff', fontSize:12, alignSelf:'center'}} >{this.state.error}</Text>
-        <View style={styles.containerSection}>
-          <TouchableOpacity style={styles.buttonStyle} onPress={this.onButtonPress.bind(this)} >
-              {this.renderButton()}
-            </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonStyle} >
-            <Text style={styles.textStyle} onPress={()=>this.props.navigation.navigate('Register')} >
-              Register
-            </Text>
-          </TouchableOpacity>
-          </View>
-        <View style={styles.containerSection} >
-          <TouchableOpacity>
-            <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center'}}>
-                Forgot Password?
-              </Text>
-            </TouchableOpacity>
-          </View>
-      </ScrollView>
+          
+            
+              <TouchableOpacity style={{ borderRadius:50, height:45, marginTop:7, backgroundColor:'#AF690E', justifyContent:'center', }} onPress={this.onButtonPress.bind(this)} >
+                  {this.renderButton()}
+              </TouchableOpacity>
+            
+            
+              <TouchableOpacity style={{ borderRadius:50, height:45, marginTop:5, backgroundColor:'#AF690E', justifyContent:'center', }}  onPress={()=>this.props.navigation.navigate('Register')}  >
+                <Text style={styles.textStyle} >
+                  Register
+                </Text>
+              </TouchableOpacity>
+            
+
+            
+              <TouchableOpacity>
+                <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center'}}>
+                    Forgot Password?
+                  </Text>
+              </TouchableOpacity>
+            
+
+        </KeyboardAvoidingView>
+        </ScrollView>
+      </View>
     )}
   }
       
 
 
 const styles = StyleSheet.create({
-  TextInputStyle: {
-    flex:1,
-    alignSelf: 'stretch',
-    borderRadius:50,
-    backgroundColor:'#383838',
-    marginLeft:3,
-    color:'#fff',
-    fontSize:18,
-    marginTop:3
+  logo:{
+    height: IMAGE_HEIGHT,
+    resizeMode: 'contain',
+    marginBottom: 20,
+    padding:10,
+    marginTop:20
   },
-
-  buttonStyle: {
-    flex: 1,
-    alignSelf: 'stretch',
-    borderRadius: 50,
-    marginTop:3,
-    marginLeft: 5,
-    marginRight: 5,
-    backgroundColor:'#f99931',
-    height:45
-},
 textStyle: {
     alignSelf: 'center',
     //color: '#fff',
@@ -208,17 +259,6 @@ textStyle: {
     paddingTop: 10,
     paddingBottom: 10,
     
-},
-containerSection: {
-  flex:1,
-  marginTop:5,
-  justifyContent: 'space-between',
-  flexDirection: 'column',
-  position: 'relative',
-  paddingLeft:15,
-  paddingRight:15
-
-  
 }
 })
 

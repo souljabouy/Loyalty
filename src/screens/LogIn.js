@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
-import {Card, CardSection, Button, Header } from '../components/common';
-import { getTokken } from '../components/asyncFunctions/AsyncFunctions'
+import {View,KeyboardAvoidingView ,Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, AsyncStorage, Alert, Image } from 'react-native';
 
 class LogIn extends Component {
   componentWillMount(){
-    getTokken();
     this.getUserId();
     }
 
@@ -25,11 +22,6 @@ class LogIn extends Component {
   static navigationOptions = {
     header:null
   }
-
-//  componentDidUpdate() {
-//    this.storePassword(this.state.passWord);
-//    this.storePhoneNumber(this.state.PhnNo);
-//  }
 
   onButtonPress(){
     this.setState({ loading:true, error:'' });
@@ -75,7 +67,7 @@ class LogIn extends Component {
 
   async storeToken(respone1){
     try{
-      await AsyncStorage.setItem('TOKKEN', respone1)
+      await AsyncStorage.setItem('TOKKEN', respone1.toString())
     } catch(error){
       Alert.alert('','error  storing user tokken')
     }
@@ -100,17 +92,6 @@ class LogIn extends Component {
     }
 } 
 
-//   getTokken = async () => {
-//     try{
-//         let a = await AsyncStorage.getItem('TOKKEN');
-//         if (a !== null){
-//             this.setState({token:a})
-//         }
-//     } catch (error){
-//         console.log(error)
-//     }
-// }
-
   onLoginSucces( arg1, arg2){
       this.setState({
           // PhnNo:'',
@@ -120,10 +101,11 @@ class LogIn extends Component {
           userID:arg1,
           token:arg2
         });
-        this.storePassword(this.state.Password),
-        this.storePhoneNumber(this.state.PhnNo),
-        this.storeToken(arg2)
-        this.storeUserId(arg1)
+        this.storePassword(this.state.Password);
+        this.storePhoneNumber(this.state.PhnNo);
+        this.storeToken(arg2);
+        this.storeUserId(arg1);
+        AsyncStorage.setItem("isLoggedIn", "200")
         this.props.navigation.navigate('App');   
   }
 
@@ -134,104 +116,110 @@ class LogIn extends Component {
 
   renderButton() {
       if (this.state.loading) {
-          return <ActivityIndicator size={'small'} />
+          return (
+              <ActivityIndicator size={'small'} style={{paddingTop:13}}/>
+            )
       }
      return (
-        <Button withPress={this.onButtonPress.bind(this)} >Log In</Button>
+          <Text style={styles.textStyle}>
+            Log In
+          </Text>
      ) 
   }
 
   render() {
     return(
-      <View >     
-      <Header headerText='Login' />
-        <ScrollView>
-        <View  style={{height:100, flex:1}} />
-        <Card Style={styles.containerStyle}>
-        <CardSection >
-        <TextInput
-        placeholder="phone number"
+      <ScrollView style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
+        <View style={styles.containerSection} >
+            <Image source={require('../Assets/MerakiLogo.jpg')} style={{alignSelf:'center'}} />
+          </View>
+        <View style={styles.containerSection} >
+          <TextInput
+              placeholder="phone number"
               style={ styles.TextInputStyle }
               value={this.state.PhnNo}
               onChangeText={PhnNo=> this.setState({PhnNo})}
               keyboardType="number-pad"
-              />
-          </CardSection>
-          <CardSection>
-          <TextInput
-          placeholder="password"
+              placeholderTextColor='#dbdbdb'
+              textAlign='center'
+
+           />
+          <TextInput 
+              placeholder='Password'
               secureTextEntry
-              style={ styles.TextInputStyle }
+              style={styles.TextInputStyle}
               value={this.state.Password}
-              onChangeText={Password=>this.setState({Password})}
+              onChangeText={Password=> this.setState({Password})}
+              placeholderTextColor='#dbdbdb'
+              textAlign='center'
             />
-            </CardSection>
-              <Text>
-                {this.state.token}
-              </Text>
-              <Text>
-                {this.state.PhnNo}
-              </Text>
-            </Card>
-            <View style={{marginTop:10}}>
-            <CardSection >
-            {this.renderButton()}
-            </CardSection>
-            <CardSection>
-              <TouchableOpacity style={styles.buttonStyle} onPress={()=>{this.props.navigation.navigate('Register')}}>
-              <Text style={styles.textStyle}>
-              Register
-              </Text>
-              </TouchableOpacity> 
-            </CardSection>
-            </View>
-            </ScrollView>
           </View>
-          )
-        }
-}
+          <Text style={{color:'#fff', fontSize:12, alignSelf:'center'}} >{this.state.error}</Text>
+        <View style={styles.containerSection}>
+          <TouchableOpacity style={styles.buttonStyle} onPress={this.onButtonPress.bind(this)} >
+              {this.renderButton()}
+            </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonStyle} >
+            <Text style={styles.textStyle} onPress={()=>this.props.navigation.navigate('Register')} >
+              Register
+            </Text>
+          </TouchableOpacity>
+          </View>
+        <View style={styles.containerSection} >
+          <TouchableOpacity>
+            <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center'}}>
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
+          </View>
+      </ScrollView>
+    )}
+  }
+      
 
 
 const styles = StyleSheet.create({
   TextInputStyle: {
-    height:50,
-    width: '100%'
+    flex:1,
+    alignSelf: 'stretch',
+    borderRadius:50,
+    backgroundColor:'#383838',
+    marginLeft:3,
+    color:'#fff',
+    fontSize:18,
+    marginTop:3
   },
-  containerStyle: {
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10
-  },
+
   buttonStyle: {
     flex: 1,
     alignSelf: 'stretch',
-    //backgroudColor: '#fff',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007aff',
+    borderRadius: 50,
+    marginTop:3,
     marginLeft: 5,
     marginRight: 5,
-
-
+    backgroundColor:'#f99931',
+    height:45
 },
 textStyle: {
     alignSelf: 'center',
-    color: '#007aff',
-    fontSize: 16,
+    //color: '#fff',
+    fontSize: 18,
     fontWeight: '600',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    
+},
+containerSection: {
+  flex:1,
+  marginTop:5,
+  justifyContent: 'space-between',
+  flexDirection: 'column',
+  position: 'relative',
+  paddingLeft:15,
+  paddingRight:15
+
+  
 }
 })
 
 export default LogIn;
-

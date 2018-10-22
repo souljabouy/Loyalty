@@ -2,10 +2,13 @@ import { createStackNavigator, createSwitchNavigator, createDrawerNavigator, cre
 import React from 'react';
 import LogIn from './screens/LogIn';
 import Register from './screens/Register';
-import MainPage from './screens/MainPage';
-import GlobalPoints from './screens/GlobalPoints';
+import MainScreen from './screens/MainScreen';
+import Profile from './screens/Profile';
 import AuthLoading from './screens/AuthLoading';
-import StorePage from './screens/StorePage'
+import FreeItems from './screens/FreeItems';
+import RedeemScreen from './screens/RedeemScreen'
+import History from './screens/History'
+import BillClaim from './screens/BillClaim'
 
 
 const AuthStack = createStackNavigator({
@@ -18,41 +21,41 @@ const AuthStack = createStackNavigator({
         }
     )
  
-
-const MainPageStack = StackNavigator({
-    Main:{
-        screen: MainPage
-    },
-    StorePage:{
-        screen:StorePage
-    }
-},
-    {
-        navigationOptions:{
-            initialRouteName: 'Main',
-        }
-    }
-)
-       
-const DrawerStack = DrawerNavigator({ 
-        MainPageStack:{
-            screen:MainPageStack,
-            navigationOptions:{
-                title:'Home'
-            }
+      
+const AppStack = createStackNavigator({ 
+        HomePage:{
+            screen:MainScreen,
+            
         },
-        GlobalPoints:{
-            screen:GlobalPoints
-        } 
-    }
-)
+        Profile:{
+            screen:Profile
+        },
+        RedeemScreen:{
+            screen:RedeemScreen
+            
+        },
+        FreeItems:{
+            screen:FreeItems
+        },
+        History:{
+            screen:History
+        },
+        BillClaim:{
+            screen:BillClaim
+        }
+    })
 
 export default App = createSwitchNavigator({
-    Auth:AuthStack,
-    App:DrawerStack
+    Auth:{
+        screen:AuthStack
     },
-    {
+    App:{
+        screen:AppStack
+    }
+    },{
+    navigationOptions:{
         initialRouteName: 'Auth',
         gesturesEnabled:false
+        }
     }
 )

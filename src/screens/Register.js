@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, TextInput, Alert, StyleSheet, ScrollView, ActivityIndicator, Text } from 'react-native';
+import {View, TextInput, Image, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import {Card, CardSection, Button, Header } from '../components/common';
 
 class Register extends Component {
@@ -13,7 +13,12 @@ class Register extends Component {
 
         }
     }
-    registerOnButtonPress(){
+
+    static navigationOptions = {
+        header:null
+      }
+    
+    OnButtonPress(){
         this.setState({ loading:true, error:'' });
 
     fetch('http://echespos.com/jawaahiruapi/index.php', {
@@ -99,66 +104,88 @@ class Register extends Component {
             return <ActivityIndicator size='small' />
         }
         return (
-            <Button withPress={ this.registerOnButtonPress.bind(this) } >Register</Button>
+            
+            <TouchableOpacity onPress={this.OnButtonPress.bind(this)} style={styles.buttonStyle} >
+                    <Text style={styles.textStyle}>
+                            Register
+                        </Text>
+                </TouchableOpacity>
         )
     }
 
     render(){
         return(
-                <View style={ styles.MainScrollViewStyle } >
-                    <Card Styles={styles.containerStyle}>
-                    <CardSection >
-                    <TextInput
-                    placeholder="phone number"
-                    style={ styles.TextInputStyle }
-                    value={this.state.phnNo}
-                    onChangeText={phnNo => this.setState({phnNo})}
-                    keyboardType="number-pad"
-                    />
-                    </CardSection>
-                    </Card>
-                    <View style={{paddingTop:10}}>
-                    <Text> {this.state.error} </Text>
-                    <CardSection >
-                        { this.renderButton() }
-                    </CardSection>
-                    <CardSection>
-                        <Button withPress={()=>this.props.navigation.navigate('App')} >
-                            to the app
-                        </Button>
-                    </CardSection>
-                    </View>                
-                </View>
+                <ScrollView style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
+                    <View style={{flex:1, Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5}}  >
+                            <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
+                                    <Image source={ require('../Assets/arrow.png') } />
+                                </TouchableOpacity>
+                        </View>
+                    <View style={styles.containerSection} >
+                            <Image source={require('../Assets/MerakiLogo.jpg')} style={{alignSelf:'center'}} />
+                        </View>
+                    <View style={styles.containerSection} >
+                        <TextInput
+                                placeholder="phone number"
+                                style={ styles.TextInputStyle }
+                                value={this.state.phnNo}
+                                onChangeText={phnNo => this.setState({phnNo})}
+                                keyboardType="number-pad"
+                                placeholderTextColor='#dbdbdb'
+                                textAlign='center'
+                                />
+                                <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center'}} > {this.state.error} </Text>
+                                { this.renderButton() }              
+                            </View>
+                </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
     TextInputStyle: {
-      height:50,
-      width: '100%'
+      flex:1,
+      alignSelf: 'stretch',
+      borderRadius:50,
+      backgroundColor:'#383634',
+      marginLeft:3,
+      color:'#fff',
+      fontSize:18,
+      marginTop:3
     },
-    containerStyle: {
-            borderWidth: 1,
-            borderRadius: 2,
-            borderColor: '#ddd',
-            borderBottomWidth: 0,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 2,
-            elevation: 1,
-            marginLeft: 5,
-            marginRight: 5,
-            marginTop: 10
+  
+    buttonStyle: {
+      flex: 1,
+      alignSelf: 'stretch',
+      borderRadius: 50,
+      marginLeft: 5,
+      marginRight: 5,
+      backgroundColor:'#f99931'
+  },
+  textStyle: {
+      alignSelf: 'center',
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: '600',
+      paddingTop: 10,
+      paddingBottom: 10,
+      
+  },
+  containerSection: {
+    flex:1,
+    flexDirection: 'column',
+    position: 'relative',
+    paddingLeft:15,
+    paddingRight:15
+  
     
-        },
-    MainScrollViewStyle: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        
-    }
+  }
   })
 
 export default Register;
+
+// <View style={{flex:1, maxHeight:10, flexDirection:'row', alignItems:'flex-start'}} >
+//                         <TouchableOpacity onPress={this.props.navigation.goBack()}>
+//                                 <Image source={require('../Assetes/arrow.png')} />
+//                             </TouchableOpacity>
+//                         </View>

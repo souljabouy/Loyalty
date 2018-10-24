@@ -9,13 +9,15 @@ class Profile extends Component {
     render(){
         return(
             <ScrollView style={{backgroundColor:'#282828', flex:1}}>
-                <View style={{Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5, backgroundColor:'#AF690E'}}  >
+
+                <View style={{height:260, backgroundColor:'#AF690E', flexDirection:'column', justifyContent:'center'}} >
+
+                <View style={{Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5, backgroundColor:'#AF690E', alignSelf:'flex-start'}}  >
                 <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
-                        <Image source={ require('../Assets/arrow.png') } />
+                        <Image source={ require('../Assets/home-4-64.png') } />
                     </TouchableOpacity>
                 </View>
 
-                <View style={{height:260, backgroundColor:'#AF690E', flexDirection:'column', justifyContent:'center'}} >
                     <View style={{ borderWidth:3, justifyContent:'center', alignSelf:'center', backgroundColor:'#999', borderRadius:100, borderColor:'#fff', width:180, height:180, marginTop:-50 }} >
                         <Image source={require('../Assets/contacts-128.png')} style={{alignSelf:'center'}} />
                     </View>

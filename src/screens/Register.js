@@ -116,10 +116,10 @@ class Register extends Component {
     render(){
         return(
                 <ScrollView style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
-                    <View style={{flex:1, Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5}}  >
-                            <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
-                                    <Image source={ require('../Assets/arrow.png') } />
-                                </TouchableOpacity>
+                    <View style={{flex:1, Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5,}}  >
+                        <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
+                                <Image source={ require('../Assets/home-4-64.png') } />
+                        </TouchableOpacity>
                         </View>
                     <View style={styles.containerSection} >
                             <Image source={require('../Assets/MerakiLogo.jpg')} style={{alignSelf:'center'}} />

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import {View, ScrollView, KeyboardAvoidingView,Dimensions ,Text, TextInput, StyleSheet, Animated, Keyboard, Platform, ActivityIndicator, TouchableOpacity, AsyncStorage, Alert, Image } from 'react-native';
+import {View, ScrollView, KeyboardAvoidingView,Dimensions,
+                            Text, TextInput, StyleSheet, Animated, Keyboard, Platform, ActivityIndicator, 
+                            TouchableOpacity, 
+                            AsyncStorage, Alert, Image, } from 'react-native';
+
 const window = Dimensions.get('window');
 
 
@@ -20,7 +24,8 @@ class LogIn extends Component {
         loading: false,
         error:'',
         userID:'',
-        token:''
+        token:'',
+        modalVisible:false
       }
       this.imageHeight = new Animated.Value(IMAGE_HEIGHT); 
 
@@ -176,6 +181,10 @@ class LogIn extends Component {
     }).start();
   };
 
+  setModalVisible(visible){
+    this.setState({modalVisible: visible })
+  }
+
   render() {
     return(
       <View style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
@@ -184,13 +193,13 @@ class LogIn extends Component {
           <Animated.Image source={require('../Assets/MerakiLogo.jpg')} style={[styles.logo, {height:this.imageHeight}]} />
         </View>
 
-        <ScrollView style={{flex:1, backgroundColor:'#000', marginTop:-15}}>
+        <View style={{flex:1, backgroundColor:'#000', marginTop:-15}}>
         <KeyboardAvoidingView style={{ flex:1, justifyContent:'center', alignContent:'center', paddingLeft:35, paddingRight:35 }} behavior='padding' >
 
           <View style={{  borderRadius:50, height:45, backgroundColor:'#383838' }} >
             <TextInput
                 placeholder="phone number"
-                style={ styles.TextInputStyle }
+                style={{ color:'#ccc', fontSize:18 }}
                 value={this.state.PhnNo}
                 onChangeText={PhnNo=> this.setState({PhnNo})}
                 keyboardType="number-pad"
@@ -204,7 +213,7 @@ class LogIn extends Component {
             <TextInput 
               placeholder='Password'
               secureTextEntry
-              style={styles.TextInputStyle}
+              style={{ color:'#ccc', fontSize:18  }}
               value={this.state.Password}
               onChangeText={Password=> this.setState({Password})}
               placeholderTextColor='#dbdbdb'
@@ -228,15 +237,15 @@ class LogIn extends Component {
             
 
             
-              <TouchableOpacity>
-                <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center'}}>
+              <TouchableOpacity onPress={()=> this.setModalVisible(true) } >
+                <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center', marginTop:6}}>
                     Forgot Password?
                   </Text>
               </TouchableOpacity>
             
 
         </KeyboardAvoidingView>
-        </ScrollView>
+        </View>
       </View>
     )}
   }
@@ -253,7 +262,7 @@ const styles = StyleSheet.create({
   },
 textStyle: {
     alignSelf: 'center',
-    //color: '#fff',
+    color: '#ccc',
     fontSize: 18,
     fontWeight: '600',
     paddingTop: 10,

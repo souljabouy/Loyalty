@@ -16,7 +16,7 @@ class FreeItems extends Component{
             <View style={{backgroundColor:'#282828', flex:1}} >
                 <View style={{Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5, backgroundColor:'#282828'}}  >
                     <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
-                        <Image source={ require('../Assets/arrow.png') } />
+                        <Image source={ require('../Assets/home-4-64.png') } />
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection:'column', backgroundColor:'#282828', flex:1, justifyContent:'center', paddingLeft:40, paddingRight:40 }} >

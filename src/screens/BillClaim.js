@@ -2,9 +2,18 @@ import React, {Component} from 'react';
 import { Text, View, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 
 class BillClaim extends Component {
+
     static navigationOptions = {
         header:null
     }
+
+   constructor(props){
+       super(props)
+       state = {
+           BillNo:'',
+           Amount:''
+       }
+   }
 
     render(){
         return (
@@ -22,6 +31,7 @@ class BillClaim extends Component {
                         <TextInput 
                         placeholder='Bill No.'
                         style={styles.TextInputStyle}
+                        onchangeText={ BillNo => this.setState({ BillNo })}
                         placeholderTextColor='#aaa'
                         textAlign='center'
                         style={styles.textInputStyle}
@@ -31,6 +41,7 @@ class BillClaim extends Component {
                         <TextInput 
                         placeholder='Amount'
                         style={styles.TextInputStyle}
+                        onchangeText={ Amount => this.setState({Amount}) }
                         placeholderTextColor='#aaa'
                         textAlign='center'
                         style={styles.textInputStyle}

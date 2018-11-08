@@ -1,4 +1,4 @@
-package com.loyaltyapp;
+package com.merakiloyalty;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "LoyaltyApp";
+        return "MerakiLoyalty";
     }
 }

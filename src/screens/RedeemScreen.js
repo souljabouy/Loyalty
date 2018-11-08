@@ -1,12 +1,26 @@
 import React, {Component} from 'react';
-import { Text, View, TouchableOpacity, AsyncStorage, Image, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, AsyncStorage, Image, TextInput, Modal } from 'react-native';
 
 
 
 class RedeemScreen extends Component{
+
+    constructor(props){
+        super(props)
+        this.state = {
+            modalVisible: false,
+            mvr:''
+        }
+    }
+
     static navigationOptions = {
         header:null
     }
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+      }
+    
     
     render(){
         return(
@@ -23,17 +37,43 @@ class RedeemScreen extends Component{
                     <View style={{ borderRadius:50, height:45, marginTop:8, backgroundColor:'#383838' }} >
                         <TextInput 
                         placeholder='MVR'
+                        value={this.state.mvr}
+                        onChangeText={(mvr)=>this.setState({ mvr })}
                         style={styles.TextInputStyle}
                         placeholderTextColor='#aaa'
                         textAlign='center'
+                        keyboardType="number-pad"
                         style={styles.textInputStyle}
                         />
                     </View>
-                    <TouchableOpacity style={{ borderRadius:50, height:45, marginTop:10, backgroundColor:'#AF690E', justifyContent:'center', marginBottom:80 }} >
+                    <TouchableOpacity  onPress={ ()=> this.setModalVisible(true)} style={{ borderRadius:50, height:45, marginTop:10, backgroundColor:'#AF690E', justifyContent:'center', marginBottom:80 }} >
                         <Text style={{fontSize:18, color:'#000', alignSelf:'center',}} >
                             Redeem
                         </Text>
                      </TouchableOpacity>
+
+                     <Modal 
+                            animationType='slide'
+                            visible={this.state.modalVisible}
+                            onRequestClose={ ()=> console.log('modal Closed') }  
+                            transparent={true}
+                            
+                        >
+                        <View style={{ flex:1, justifyContent:'center', alignItems:'center' }} >
+                        <View style={{ justifyContent:'center', width:350 , height:150, backgroundColor:'#fff', alignSelf:'center', borderRadius:15 }} >
+                            <View>
+                                <Text style={{ fontFamily:'ConnectCode39', alignSelf:'center', fontSize:25}} >
+                                    {this.state.mvr}
+                                </Text>
+
+                            </View>
+                            <TouchableOpacity onPress={ ()=> this.setModalVisible(false) } style={{ alignSelf:'center' }} >
+                                <Text style={{ alignSelf:'center', fontSize:16}} >done</Text>
+                            </TouchableOpacity>
+                        </View>
+                        </View>
+                     </Modal>
+
                 </View>
             </View>
         )
@@ -48,10 +88,6 @@ const styles = {
 }
 
 export default RedeemScreen;
-
-
-
-
 
 
 

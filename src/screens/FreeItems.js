@@ -20,9 +20,11 @@ class FreeItems extends Component{
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection:'column', backgroundColor:'#282828', flex:1, justifyContent:'center', paddingLeft:40, paddingRight:40 }} >
-                    <Text style={{ fontSize:35, color:'#ccc', alignSelf:'center' }} >
-                        Your Free Item
-                    </Text>
+                    <TouchableOpacity onPress={ ()=> this.props.navigation.navigate('RedeemScreen') } >
+                        <Text style={{ fontSize:35, color:'#ccc', alignSelf:'center' }} >
+                            Your Free Item
+                        </Text>
+                    </TouchableOpacity>
                     <View style={{ borderRadius:25, marginTop:8, backgroundColor:'#ccc', alignItems:'center' }} >
                         <Image source={require('../Assets/barcode-64(Black).png')}/>
                     </View>

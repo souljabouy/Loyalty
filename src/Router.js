@@ -1,14 +1,15 @@
-import { createStackNavigator, createSwitchNavigator, createDrawerNavigator, createTabNavigator,StackNavigator, DrawerNavigator } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, createBottomTabNavigator, createTabNavigator,StackNavigator, DrawerNavigator } from 'react-navigation';
 import React from 'react';
 import LogIn from './screens/LogIn';
 import Register from './screens/Register';
-import MainScreen from './screens/MainScreen';
-import Profile from './screens/Profile';
+import HomeScreen from './screens/HomeScreen';
+import ProfileScreen from './screens/ProfileScreen';
 import AuthLoading from './screens/AuthLoading';
 import FreeItems from './screens/FreeItems';
 import RedeemScreen from './screens/RedeemScreen'
 import History from './screens/History'
 import BillClaim from './screens/BillClaim'
+import SettingsScreen from './screens/SettingsScreen'
 
 
 const AuthStack = createStackNavigator({
@@ -21,29 +22,43 @@ const AuthStack = createStackNavigator({
         }
     )
  
-      
-const AppStack = createStackNavigator({ 
-        HomePage:{
-            screen:MainScreen,
-            
+   
+const Offers = createStackNavigator({
+    FreeItems:FreeItems,
+    RedeemScreen:RedeemScreen
+    }
+)
+
+const ProfileStack = createStackNavigator({
+    ProfileScreen:ProfileScreen,
+    SettingsScreen:SettingsScreen
+},
+{
+    navigationOptions:{
+        header:null
+    }
+})
+
+const AppStack = createBottomTabNavigator({ 
+            Offers:{
+                screen:Offers,      
+            },
+            BillClaim:{
+                screen:BillClaim
+            },
+            HomeScreen:{
+                screen:HomeScreen
+            },
+            History:{
+                screen:History
+            },
+            ProfileStack:{
+                screen:ProfileStack
+            },
         },
-        Profile:{
-            screen:Profile
-        },
-        RedeemScreen:{
-            screen:RedeemScreen
-            
-        },
-        FreeItems:{
-            screen:FreeItems
-        },
-        History:{
-            screen:History
-        },
-        BillClaim:{
-            screen:BillClaim
-        }
-    })
+        {
+            initialRouteName:'HomeScreen'
+        })
 
 export default App = createSwitchNavigator({
     Auth:{

@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
-import {View, TextInput, Image, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
-import {Card, CardSection, Button, Header } from '../components/common';
+import {                View, TextInput, Image, StyleSheet, 
+                        ScrollView, Animated, Platform, KeyboardAvoidingView, 
+                        ActivityIndicator, Text, TouchableOpacity, Dimensions,
+                        Keyboard
+                        } from 'react-native';
+
+const window = Dimensions.get('window');
+
+
+const IMAGE_HEIGHT = window.width/1.2;
+const IMAGE_HEIGHT_SMALL = window.width / 2.5;
 
 class Register extends Component {
 
@@ -12,7 +21,53 @@ class Register extends Component {
             loading: false
 
         }
+        this.imageHeight = new Animated.Value(IMAGE_HEIGHT); 
     }
+
+    componentWillMount () {
+    
+        if (Platform.OS=='ios'){
+         this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+         this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+        }else{
+         this.keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+         this.keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+        }
+     
+       }
+     
+       componentWillUnmount() {
+         this.keyboardWillShowSub.remove();
+         this.keyboardWillHideSub.remove();
+       }
+     
+       keyboardWillShow = (event) => {
+         Animated.timing(this.imageHeight, {
+           duration: event.duration,
+           toValue: IMAGE_HEIGHT_SMALL,
+         }).start();
+       };
+     
+       keyboardWillHide = (event) => {
+         Animated.timing(this.imageHeight, {
+           duration: event.duration,
+           toValue: IMAGE_HEIGHT,
+         }).start();
+       };
+     
+     
+       keyboardDidShow = (event) => {
+         Animated.timing(this.imageHeight, {
+           toValue: IMAGE_HEIGHT_SMALL,
+         }).start();
+       };
+     
+       keyboardDidHide = (event) => {
+         Animated.timing(this.imageHeight, {
+           toValue: IMAGE_HEIGHT,
+         }).start();
+       };
+     
 
     static navigationOptions = {
         header:null
@@ -89,7 +144,6 @@ class Register extends Component {
             loading:false,
             error:'phone number is in use'
             })
-    return (this.props.navigation.goBack())
     }
 
     onLoginFail(){
@@ -101,43 +155,54 @@ class Register extends Component {
 
     renderButton(){
         if (this.state.loading){
-            return <ActivityIndicator size='small' />
+            return <ActivityIndicator size='small' style={{alignSelf:'center'}} />
         }
         return (
-            
-            <TouchableOpacity onPress={this.OnButtonPress.bind(this)} style={styles.buttonStyle} >
                     <Text style={styles.textStyle}>
                             Register
                         </Text>
-                </TouchableOpacity>
+                
         )
     }
 
     render(){
         return(
-                <ScrollView style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
-                    <View style={{flex:1, Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5,}}  >
+                <View style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5, flexDirection:'column'}} >
+                    <View style={{flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5, backgroundColor:'#000'}}  >
                         <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
                                 <Image source={ require('../Assets/home-4-64.png') } />
                         </TouchableOpacity>
                         </View>
-                    <View style={styles.containerSection} >
-                            <Image source={require('../Assets/MerakiLogo.jpg')} style={{alignSelf:'center'}} />
+                    <View style={{Flex:1, justifyContent:'center', backgroundColor:'#000', alignSelf:'center'}} >
+                            <Animated.Image source={require('../Assets/MerakiLogo.png')} style={[styles.logo, {height:this.imageHeight}]} />
                         </View>
-                    <View style={styles.containerSection} >
-                        <TextInput
-                                placeholder="phone number"
-                                style={ styles.TextInputStyle }
-                                value={this.state.phnNo}
-                                onChangeText={phnNo => this.setState({phnNo})}
-                                keyboardType="number-pad"
-                                placeholderTextColor='#dbdbdb'
-                                textAlign='center'
-                                />
-                                <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center'}} > {this.state.error} </Text>
-                                { this.renderButton() }              
-                            </View>
-                </ScrollView>
+
+                    <View style={{flex:1, backgroundColor:'#000', marginTop:-20}}>
+                        
+                    <KeyboardAvoidingView style={{ flex:1, justifyContent:'flex-start', flexDirection:'column', paddingLeft:35, paddingRight:35}} behavior='padding' >
+                        
+                            <View style={{ borderRadius:50, height:45, marginTop:8, backgroundColor:'#383838', justifyContent:'center'}} >
+                                <TextInput
+                                    placeholder="phone number"
+                                    style={{ color:'#000', fontSize:16, alignSelf:'center' }}
+                                    value={this.state.phnNo}
+                                    onChangeText={phnNo => this.setState({phnNo})}
+                                    keyboardType="number-pad"
+                                    placeholderTextColor='#dbdbdb'
+                                    textAlign='center'
+                                    />
+                        </View>
+                        <Text style={{color:'#2486e2', fontSize:12, alignSelf:'center'}} >{this.state.error}</Text>
+                        
+                            <TouchableOpacity onPress={()=>this.OnButtonPress()}  style={{ borderRadius:50, height:45, marginTop:7, backgroundColor:'#AF690E', justifyContent:'center', alignitems:'center' }} >
+                            {this.renderButton()}
+                            </TouchableOpacity>             
+                    
+                    </KeyboardAvoidingView>
+
+                    </View>
+                    
+                </View>
         )
     }
 }
@@ -148,9 +213,8 @@ const styles = StyleSheet.create({
       alignSelf: 'stretch',
       borderRadius:50,
       backgroundColor:'#383634',
-      marginLeft:3,
       color:'#fff',
-      fontSize:18,
+      fontSize:16,
       marginTop:3
     },
   
@@ -165,7 +229,7 @@ const styles = StyleSheet.create({
   textStyle: {
       alignSelf: 'center',
       color: '#fff',
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: '600',
       paddingTop: 10,
       paddingBottom: 10,
@@ -179,7 +243,16 @@ const styles = StyleSheet.create({
     paddingRight:15
   
     
-  }
+  },
+  logo:{
+    height: IMAGE_HEIGHT,
+    resizeMode: 'contain',
+    marginBottom: 20,
+    padding:10,
+    marginTop:20,
+    alignSelf:'center'
+  },
+
   })
 
 export default Register;

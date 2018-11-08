@@ -1,4 +1,4 @@
-package com.loyaltyapp;
+package com.merakiloyalty;
 
 import android.app.Application;
 

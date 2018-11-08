@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import {View, ScrollView, KeyboardAvoidingView,Dimensions,
-                            Text, TextInput, StyleSheet, Animated, Keyboard, Platform, ActivityIndicator, 
+                            Text, TextInput, StyleSheet, Animated, Keyboard, 
+                            Platform, ActivityIndicator, 
                             TouchableOpacity, 
-                            AsyncStorage, Alert, Image, } from 'react-native';
+                            AsyncStorage, Alert, Image, 
+                            } from 'react-native';
 
 const window = Dimensions.get('window');
 
 
 const IMAGE_HEIGHT = window.width/1.2;
 const IMAGE_HEIGHT_SMALL = window.width / 2.5;
+
+
 
 class LogIn extends Component {
   componentWillMount(){
@@ -128,7 +132,7 @@ class LogIn extends Component {
   renderButton() {
       if (this.state.loading) {
           return (
-              <ActivityIndicator size={'small'} style={{paddingTop:13}}/>
+              <ActivityIndicator size={'small'} style={{alignSelf:'center'}}/>
             )
       }
      return (
@@ -139,6 +143,7 @@ class LogIn extends Component {
   }
 
   componentWillMount () {
+    
    if (Platform.OS=='ios'){
     this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
     this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
@@ -181,25 +186,23 @@ class LogIn extends Component {
     }).start();
   };
 
-  setModalVisible(visible){
-    this.setState({modalVisible: visible })
-  }
 
   render() {
     return(
       <View style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
 
-        <View style={{Flex:1, justifyContent:'center', backgroundColor:'#000'}} >
-          <Animated.Image source={require('../Assets/MerakiLogo.jpg')} style={[styles.logo, {height:this.imageHeight}]} />
+        <View style={{Flex:1, justifyContent:'center', backgroundColor:'#000', alignSelf:'center'}} >
+          <Animated.Image source={require('../Assets/MerakiLogo.png')} style={[styles.logo, {height:this.imageHeight}]} />
         </View>
 
         <View style={{flex:1, backgroundColor:'#000', marginTop:-15}}>
+
         <KeyboardAvoidingView style={{ flex:1, justifyContent:'center', alignContent:'center', paddingLeft:35, paddingRight:35 }} behavior='padding' >
 
-          <View style={{  borderRadius:50, height:45, backgroundColor:'#383838' }} >
+          <View style={{  borderRadius:50, height:45, backgroundColor:'#383838', justifyContent:'center' }} >
             <TextInput
                 placeholder="phone number"
-                style={{ color:'#ccc', fontSize:18 }}
+                style={{ color:'#ccc', fontSize:16, alignSelf:'center' }}
                 value={this.state.PhnNo}
                 onChangeText={PhnNo=> this.setState({PhnNo})}
                 keyboardType="number-pad"
@@ -209,11 +212,11 @@ class LogIn extends Component {
                 />
           </View>
 
-          <View style={{ borderRadius:50, height:45, marginTop:8, backgroundColor:'#383838'}} >
+          <View style={{ borderRadius:50, height:45, marginTop:8, backgroundColor:'#383838', justifyContent:'center'}} >
             <TextInput 
               placeholder='Password'
               secureTextEntry
-              style={{ color:'#ccc', fontSize:18  }}
+              style={{ color:'#ccc', fontSize:16, alignSelf:'center'  }}
               value={this.state.Password}
               onChangeText={Password=> this.setState({Password})}
               placeholderTextColor='#dbdbdb'
@@ -221,10 +224,10 @@ class LogIn extends Component {
             />
           </View>
 
-          <Text style={{color:'#fff', fontSize:12, alignSelf:'center'}} >{this.state.error}</Text>
+          <Text style={{color:'#fff', fontSize:12, alignSelf:'center',}} >{this.state.error}</Text>
           
             
-              <TouchableOpacity style={{ borderRadius:50, height:45, marginTop:7, backgroundColor:'#AF690E', justifyContent:'center', }} onPress={this.onButtonPress.bind(this)} >
+              <TouchableOpacity style={{ borderRadius:50, height:45, marginTop:7, backgroundColor:'#AF690E', justifyContent:'center', alignitems:'center' }} onPress={this.onButtonPress.bind(this)} >
                   {this.renderButton()}
               </TouchableOpacity>
             
@@ -237,8 +240,8 @@ class LogIn extends Component {
             
 
             
-              <TouchableOpacity onPress={()=> this.setModalVisible(true) } >
-                <Text style={{color:'#2486e2', fontSize:16, alignSelf:'center', marginTop:6}}>
+              <TouchableOpacity>
+                <Text style={{color:'#2486e2', fontSize:12, alignSelf:'center', marginTop:6}}>
                     Forgot Password?
                   </Text>
               </TouchableOpacity>
@@ -258,17 +261,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginBottom: 20,
     padding:10,
-    marginTop:20
+    marginTop:20,
+    alignSelf:'center'
   },
-textStyle: {
-    alignSelf: 'center',
-    color: '#ccc',
-    fontSize: 18,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10,
-    
-}
+
+  textStyle: {
+      alignSelf: 'center',
+      color: '#ccc',
+      fontSize: 16,
+      fontWeight: '600',
+      paddingTop: 10,
+      paddingBottom: 10,
+      fontFamily:''
+      
+  }
 })
 
 export default LogIn;

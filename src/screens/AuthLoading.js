@@ -11,14 +11,18 @@ class AuthLoading extends Component {
       }
 
       componentDidMount(){
-          setTimeout(() => {
-              AsyncStorage.getItem("isLoggedIn", (error, result) => {
-                  (result === '200') ? 
-                  this.props.navigation.navigate('App') : this.props.navigation.navigate('Login');
-                })
-            }, 1000 * 2 )
+        this.GetLogedIN()
         }
-   
+
+   GetLogedIN(){
+        setTimeout(() => {
+            AsyncStorage.getItem("isLoggedIn", (error, result) => {
+                (result === '200') ? 
+                this.props.navigation.navigate('App') : this.props.navigation.navigate('Login');
+              })
+          }, 1000 * 2 )
+        }
+
         render(){
             return (
                 <View style={{flex:1}} >

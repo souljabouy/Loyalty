@@ -5,79 +5,70 @@ import { Header, Card, Button, CardSection, RoundButton
             } from '../components/common';
 
 
-
-
 class HomeScreen extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     
         this.state = {
-            accessToken: "hello",
-            UserId:'',
-            points:1548,
-            asof:'',
-            outletId:'1',
-            lastredpiont:'',
-            lastreddate:''
-        }
+            accessToken: 'hello',
+            UserId: '',
+            points: 1548,
+            asof: '',
+            outletId: '1',
+            lastredpiont: '',
+            lastreddate: ''
+        };
       }
 static navigationOptions = {
-        header:null
+        header: null
       }
 
-componentWillMount(){
+componentWillMount() {
     this.getTokken();
     //this.getUserId();
     this.getUserId();
 }
 
-logOut(){
-        AsyncStorage.setItem("isLoggedIn", "211")
-        this.props.navigation.navigate('Auth');
-    }
 
 getTokken = async () => {
-    try{
-        let a = await AsyncStorage.getItem('Tokken');
-        if (a !== null){
-            this.setState({accessToken:a})
+    try {
+        const a = await AsyncStorage.getItem('Tokken');
+        if (a !== null) {
+            this.setState({ accessToken: a });
         }
-    } catch (error){
-        console.log(error)
+    } catch (error) {
+        console.log(error);
     }
 }   
 getUserId = async () => {
-    try{
-        let a = await AsyncStorage.getItem('USERID');
-        if (a !== null){
-            this.setState({UserId:a})
+    try {
+        const a = await AsyncStorage.getItem('USERID');
+        if (a !== null) {
+            this.setState({ UserId: a });
         }
-    } catch (error){
-        Alert.alert('','get user error')
+    } catch (error) {
+        Alert.alert('', 'get user error');
     }
 } 
-render(){
-        return(
+render() {
+        return (
             <View style={styles.ViewStyle}>
-                <View style={{flex:1, backgroundColor:'#AF690E', flexDirection:'column', justifyContent:'center'}} >
-                    <Image source={require('../Assets/Coffee.png')} style={{alignSelf:'center'}} />
-                    <Text style={{fontSize:26, color:'#fff', alignSelf:'center'}} >
-                            {this.state.points}
+                <View style={{ flex: 1, backgroundColor: '#AF690E', flexDirection: 'column', justifyContent: 'center' }} >
+                    <Image source={require('../Assets/Coffee.png')} style={{ alignSelf: 'center' }} />
+                    <Text style={{ fontSize: 26, color: '#fff', alignSelf: 'center' }} >
+                        {this.state.points}
                         </Text>
                     </View>
-
-
-
             </View>
-            )
+            );
         }
     }
 
             
 const styles = StyleSheet.create({
     ViewStyle: {
-        flex:1,
-        backgroundColor:'#282828'
+        flex: 1,
+        backgroundColor: '#AF690E'
     }
-})
+});
 export default HomeScreen;

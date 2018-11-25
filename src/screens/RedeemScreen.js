@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Text, View, TouchableOpacity, AsyncStorage, Image, TextInput, Modal } from 'react-native';
+import {Header} from '../components/common'
 
 
 
@@ -25,11 +26,9 @@ class RedeemScreen extends Component{
     render(){
         return(
             <View style={{backgroundColor:'#282828', flex:1}} >
-                <View style={{Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5, backgroundColor:'#282828'}}  >
-                    <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
-                        <Image source={ require('../Assets/home-4-64.png') } />
-                    </TouchableOpacity>
-                </View>
+                <Header withPress={()=>this.props.navigation.goBack()} >
+                    Redeem
+                </Header>
                 <View style={{ flexDirection:'column', backgroundColor:'#282828', flex:1, justifyContent:'center', paddingLeft:40, paddingRight:40 }} >
                     <Text style={{ fontSize:35, color:'#ccc', alignSelf:'center' }} >
                         Redeem

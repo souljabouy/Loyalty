@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, ScrollView, AsyncStorage, Alert, KeyboardAvoidingView} from 'react-native';
+import { View, Text, TouchableOpacity, Image, TextInput, ScrollView, AsyncStorage, Alert, KeyboardAvoidingView, StyleSheet} from 'react-native';
 
 const EMAIL = 'EMAIL'
 const NATIONALID = 'NATIONALID'
@@ -18,18 +18,18 @@ class ProfileScreen extends Component {
             gender:'',
             password:'',
             fullName:'',
-            editable: false
+            editable: false,
+            passwordEnc:'xxxxxxx'
 
         }
+        this.getValues()
     }
 
     static navigationOptions = {
         header:null
     }
 
-    componentDidMount(){
-        this.getValues()
-    }
+    
 
     retriveEmail = async () => {
         try {
@@ -121,24 +121,22 @@ class ProfileScreen extends Component {
     render(){
         return(
             <KeyboardAvoidingView style={{backgroundColor:'#282828', flex:1}}>
+            <ScrollView>
 
-                <View style={{height:260, backgroundColor:'#AF690E', flexDirection:'column', justifyContent:'center'}} >
+                <View style={{height:260, backgroundColor:'#AF690E', flexDirection:'column', flex:1,}} >
 
-                <View style={{Height:50, flexDirection:'row', justifyContent:'space-between', paddingLeft:5, backgroundColor:'#AF6900', marginRight:15}}  >
-                    <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
-                        <Image source={ require('../Assets/home-4-64.png') } />
-                    </TouchableOpacity>
-                    <View style={ {flexDirection:'row'} } >
-                        <TouchableOpacity onPress={ ()=> this.setState({ editable: !this.state.editable }) } style={{ paddingRight:7 }} >
-                            <Image source={require( '../Assets/edit-11-16.png' )} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={ ()=> this.props.navigation.navigate('SettingsScreen') } >
-                            <Image source={ require( '../Assets/settings-3-16.png' ) } />
-                        </TouchableOpacity>
+                    <View style={{ flexDirection:'row', justifyContent:'flex-end', paddingLeft:5, marginRight:15, paddingTop:10,}}  >
+                        
+                            <TouchableOpacity onPress={ ()=> this.setState({ editable: !this.state.editable }) } style={{  paddingRight:10}} >
+                                <Image source={require( '../Assets/edit-11-64.png' )} style={[styles.iconStyles, ]} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={ ()=> this.props.navigation.navigate('SettingsScreen') }>
+                                <Image source={ require( '../Assets/settings-3-64.png' ) } style={[styles.iconStyles]} />
+                            </TouchableOpacity>
+                        
                     </View>
-                </View>
 
-                    <View style={{ borderWidth:3, justifyContent:'center', alignSelf:'center', backgroundColor:'#999', borderRadius:100, borderColor:'#fff', width:180, height:180, marginTop:-50 }} >
+                    <View style={{ borderWidth:1, justifyContent:'center', alignSelf:'center', backgroundColor:'#999', borderRadius:100, borderColor:'#fff', width:180, height:180, marginTop:-5 }} >
                         <Image source={require('../Assets/contacts-128.png')} style={{alignSelf:'center'}} />
                     </View>
 
@@ -205,7 +203,7 @@ class ProfileScreen extends Component {
                             <TextInput 
                                     placeholder='Password'
                                     editable={ this.state.editable }
-                                    value={this.state.password}
+                                    value={this.state.passwordEnc}
                                     onChangeText={password=>this.setState({ password }) }
                                     style={styles.TextInputStyle}
                                     secureTextEntry
@@ -223,20 +221,27 @@ class ProfileScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-        
+            </ScrollView>
             </KeyboardAvoidingView>
         )
     }
 }
 
 
-const styles = {
+const styles = StyleSheet.create({
         textInputStyle:{
             flex:1,
             fontSize:18,
             color:'#fff',
             alignSelf:'center'
-        }
-    }
+        },
+        iconStyles:{
+                resizeMode:'contain',
+                height:20,
+                width:20,
+                alignSelf:'flex-end',
+
+            }
+    })
 
 export default ProfileScreen;

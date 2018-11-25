@@ -5,6 +5,7 @@ import {    View,
             AsyncStorage,
             Image,
             TouchableOpacity } from 'react-native';
+import {Header} from '../components/common'
 
 class FreeItems extends Component{
     static navigationOptions = {
@@ -14,11 +15,9 @@ class FreeItems extends Component{
     render(){
         return(
             <View style={{backgroundColor:'#282828', flex:1}} >
-                <View style={{Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, paddingLeft:5, backgroundColor:'#282828'}}  >
-                    <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
-                        <Image source={ require('../Assets/home-4-64.png') } />
-                    </TouchableOpacity>
-                </View>
+                <Header withPress={()=>this.props.navigation.goBack()} >
+                    FreeItems
+                </Header>
                 <View style={{ flexDirection:'column', backgroundColor:'#282828', flex:1, justifyContent:'center', paddingLeft:40, paddingRight:40 }} >
                     <TouchableOpacity onPress={ ()=> this.props.navigation.navigate('RedeemScreen') } >
                         <Text style={{ fontSize:35, color:'#ccc', alignSelf:'center' }} >

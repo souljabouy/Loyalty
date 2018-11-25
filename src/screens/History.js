@@ -13,12 +13,6 @@ class History extends Component{
 
                 <View style={{ marginLeft:35, marginRight:35, justifyContent:'center', flexDirection:'row', marginTop:10}}>
 
-                    <View style={{Height:50, flexDirection:'row', alignItems:'flex-start', paddingTop:15, marginLeft:-20, backgroundColor:'#282828', alignSelf:'flex-start'}}  >
-                        <TouchableOpacity onPress={()=> this.props.navigation.goBack()} >
-                            <Image source={ require('../Assets/home-4-64.png') } />
-                        </TouchableOpacity>
-                    </View>
-
                     <View style={{flexDirection:'row', borderRadius:50, backgroundColor:'#555', flex:1, justifyContent:'space-between', height:45, marginLeft:15, alignSelf:'flex-end', marginTop:60}} >
                         <TextInput
                                 placeholder='search'

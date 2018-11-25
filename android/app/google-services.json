@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "748458970207",
+    "firebase_url": "https://jawaahiru-355bb.firebaseio.com",
+    "project_id": "jawaahiru-355bb",
+    "storage_bucket": "jawaahiru-355bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748458970207:android:1632c092850a20dd",
+        "android_client_info": {
+          "package_name": "com.merakiloyalty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "748458970207-9fhs50hvn5n24s1n3mjjbvs3fsotajeg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3UAzOzf3c54voKQyT5vYq0ahAc9oS1Cg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

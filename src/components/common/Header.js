@@ -1,35 +1,23 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, Alert, Dimensions } from 'react-native';
 
+const window = Dimensions.get('window');
+const Width = window.width
 
-const Header = (props) => {
-    const { textStyle, viewStyle } = styles;
+const Header = ({children, withPress}) => {
 
     return (
-        <View style={viewStyle} >
-            <Text style={textStyle} >{props.headerText}</Text>
+        <View style={{ flexDirection: 'row', borderBottomColor:'#ddd', borderBottomWidth:StyleSheet.hairlineWidth, justifyContent:'space-between', alignItems:'center', padding:10 }} >
+            <TouchableOpacity onPress={withPress} >
+                    <Image source={require('../../Assets/arrow.png')} style={{resizeMode:'contain', width:22, height:22}} />
+            </TouchableOpacity>
+            <Text style={{ fontSize:24, color:'#ddd'}} >
+            {children}
+            </Text>
+            <View style={{width:22, height:22}} >
+            </View>
         </View>
         );
-};
-
-const styles = {
-    viewStyle: {
-        backgroundColor: '#d4d4d4',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 60,
-        paddingTop: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        elevation: 2,
-        position: 'relative',
-        borderRadius: 5,
-        marginBottom: 15
-    },
-    textStyle: {
-        fontSize: 25
-    }
 };
 
 

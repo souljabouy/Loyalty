@@ -1,37 +1,52 @@
 import React, { Component } from 'react';
-import {View, Text, AsyncStorage, Alert, Button} from 'react-native';
+import {View, AsyncStorage,} from 'react-native';
 import {Spinner} from '../components/common';
-import { Header, Card } from '../components/common';
-
-
+import HandleBack from './Back'
+const SECURED = 'SECURED'
 class AuthLoading extends Component {
-
-    static navigationOptions = {
-        header:null
-      }
 
       componentDidMount(){
         this.GetLogedIN()
         }
 
+
+    a = null;
+
+   getValue = async () => {
+    try {
+        a = await AsyncStorage.getItem('isLoggedIn')
+        b = await AsyncStorage.getItem('SECURED');
+        if (a === '200' && b === '200') {
+            this.props.navigation.navigate('PinCodeScreen')
+        }else if (a === '200' && b !== '200'){
+            this.props.navigation.navigate('App')
+        }else{
+          this.props.navigation.navigate('Login')
+        }
+    } catch (error) {
+        console.warn(error);
+    }   
+}
+
    GetLogedIN(){
         setTimeout(() => {
-            AsyncStorage.getItem("isLoggedIn", (error, result) => {
-                (result === '200') ? 
-                this.props.navigation.navigate('App') : this.props.navigation.navigate('Login');
-              })
+            this.getValue()
           }, 1000 * 2 )
         }
-
+    onBack = () => {
+        BackHandler.exitApp()
+        return true
+        }
         render(){
             return (
-                <View style={{flex:1}} >
-                    <Spinner size='large' />
-                </View>
+                <HandleBack onBack={this.onBack} >
+                    <View style={{flex:1}} >
+                        <Spinner size='large' />
+                    </View>
+                </HandleBack>
                 )
             }
         }
         
         
         export default AuthLoading;
-

@@ -1,10 +1,9 @@
-import React, { Components } from 'react';
+import React from 'react';
 import App from './Router';
 
 
-const LoyaltyApp = ()=>{
+const LoyaltyApp = () => 
        //return <LogIn />
-       return <App />
-}
+        <App />;
 
 export default LoyaltyApp;

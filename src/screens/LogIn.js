@@ -4,7 +4,9 @@ import {View, ScrollView, KeyboardAvoidingView,Dimensions,
                             Platform, ActivityIndicator, 
                             TouchableOpacity, 
                             AsyncStorage, Alert, Image, 
+                            BackHandler
                             } from 'react-native';
+import HandleBack from './Back'
 
 const window = Dimensions.get('window');
 
@@ -29,7 +31,6 @@ class LogIn extends Component {
         error:'',
         userID:'',
         token:'',
-        modalVisible:false
       }
       this.imageHeight = new Animated.Value(IMAGE_HEIGHT); 
 
@@ -37,6 +38,24 @@ class LogIn extends Component {
   static navigationOptions = {
     header:null
   }
+
+  componentWillMount () {
+
+    if (Platform.OS=='ios'){
+     this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+     this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    }else{
+     this.keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+     this.keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    }
+ 
+   }
+ 
+   componentWillUnmount() {
+      this.keyboardWillShowSub.remove();
+      this.keyboardWillHideSub.remove();
+   }
+
 
   onButtonPress(){
     this.setState({ loading:true, error:'' });
@@ -59,7 +78,6 @@ class LogIn extends Component {
         else {
            this.onLoginFail()
         }
-
       }
    )
   }
@@ -185,10 +203,14 @@ class LogIn extends Component {
       toValue: IMAGE_HEIGHT,
     }).start();
   };
-
+onBack = () => {
+  BackHandler.exitApp()
+  return true
+}
 
   render() {
     return(
+      <HandleBack onBack={this.onBack} >
       <View style={{backgroundColor:'#000', flex:1, paddingLeft:5, paddingRight:5}} >
 
         <View style={{Flex:1, justifyContent:'center', backgroundColor:'#000', alignSelf:'center'}} >
@@ -207,7 +229,10 @@ class LogIn extends Component {
                 onChangeText={PhnNo=> this.setState({PhnNo})}
                 keyboardType="number-pad"
                 placeholderTextColor='#dbdbdb'
-                textAlign='center'
+                textAlign='center'and
+                returnKeyType="next"
+                onSubmitEditing={()=>this.passwordInput.focus() }
+                enablesReturnKeyAutomatically={true}
 
                 />
           </View>
@@ -215,12 +240,19 @@ class LogIn extends Component {
           <View style={{ borderRadius:50, height:45, marginTop:8, backgroundColor:'#383838', justifyContent:'center'}} >
             <TextInput 
               placeholder='Password'
+              autoCapitalize='none'
+              autoCorrect={false}
               secureTextEntry
               style={{ color:'#ccc', fontSize:16, alignSelf:'center'  }}
               value={this.state.Password}
               onChangeText={Password=> this.setState({Password})}
               placeholderTextColor='#dbdbdb'
               textAlign='center'
+              returnKeyType="go"
+              ref={(input)=> this.passwordInput = input }
+              enablesReturnKeyAutomatically={true}
+              onSubmitEditing={()=>this.onButtonPress() }
+              
             />
           </View>
 
@@ -250,6 +282,7 @@ class LogIn extends Component {
         </KeyboardAvoidingView>
         </View>
       </View>
+      </HandleBack>
     )}
   }
       
